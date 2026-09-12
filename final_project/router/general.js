@@ -3,6 +3,7 @@ let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
+const axios = require('axios');
 
 // Asynchronous function to get all books.
 async function getBooks(req, res) {
@@ -127,6 +128,55 @@ public_users.get('/review/:isbn',function (req, res) {
     res.status(404).json({message: "No reviews for this book found."});
   }
 });
+
+
+async function axGetAllBooks() {
+    try {
+        let response = await axios.get('https://trentwhollid-5000.theianext-0-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/');
+        const books = response.data;
+        console.log(books)
+        return books
+    } catch (error) {
+        console.error("Error getting data", error);
+    }
+}
+async function axGetBooksISBN(isbn) {
+    try {
+        let response = await axios.get('https://trentwhollid-5000.theianext-0-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/isbn/'+ isbn);
+        const books = response.data;
+        console.log(books)
+        return books
+    } catch (error) {
+        console.error("Error getting data", error);
+    }
+}
+async function axGetBooksAuthor(author) {
+    try {
+        let response = await axios.get('https://trentwhollid-5000.theianext-0-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/author/'+ author);
+        const books = response.data;
+        console.log(books)
+        return books
+    } catch (error) {
+        console.error("Error getting data", error);
+    }
+}
+async function axGetBooksTitle(title) {
+    try {
+        let response = await axios.get('https://trentwhollid-5000.theianext-0-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/title/'+ title);
+        const books = response.data;
+        console.log(books)
+        return books
+    } catch (error) {
+        console.error("Error getting data", error);
+    }
+}
+
+axGetAllBooks();
+axGetBooksISBN(1);
+axGetBooksAuthor("Samuel Beckett")
+axGetBooksTitle("The Book Of Job")
+
+
 
 
 module.exports.general = public_users;
