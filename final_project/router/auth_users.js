@@ -5,6 +5,7 @@ const regd_users = express.Router();
 
 let users = [];
 
+// Check to see if username is valid.
 const isValid = (username)=>{ //returns boolean
   let filteredUsers = users.filter((user) => {
     return user.username === username;
@@ -17,11 +18,13 @@ const isValid = (username)=>{ //returns boolean
   }
 };
 
+// Check to see if user is authenticated.
 const authenticatedUser = (username,password)=>{ //returns boolean
   let filteredUsers = users.filter((user) => {
     return ( user.username === username && user.password === password)
   });
 
+  // If we found this user exists, return true. Else return false.
   if (filteredUsers.length > 0) {
     return true;
   } else {
@@ -34,10 +37,11 @@ regd_users.post("/login", (req,res) => {
   const username = req.body.username;
   const password = req.body.password;
 
+  // If the user is authenticated, generate an access Token, and store it in the session, along with the username.
   if (authenticatedUser(username, password)) {
     let accessToken = jwt.sign({data: username}, 'access', {expiresIn: 60 * 60});
     req.session.authorization = {accessToken, username};
-    return res.status(200).json({message: "User successfully logged in."});
+    return res.status(200).json({message: "Login successful!"});
   } else {
     return res.status(404).json({message: "Invalid Login, please check username and password."});
   };
@@ -48,14 +52,15 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   const userReview = req.body.review;
   const isbn = req.params.isbn;
 
-  if (req.session.authorization["username"] in books[isbn]["reviews"]) {
+  // Check to see if there is a valid review. If it is add/update the review.
+  if (userReview){
     books[isbn]["reviews"][req.session.authorization["username"]] = userReview;
-    res.status(200).json({message: "Your review has been updated."});
+    res.status(200).json({message: "Review added/updated successfully", "reviews":books[isbn]["reviews"]});
   } else {
-    books[isbn]["reviews"][req.session.authorization["username"]] = userReview;
-    res.status(200).json({message: "Your review has been created."});
+    res.status(404).json({message: "Review was unable to be added/updated."});
   }
 });
+
 
 // Delete a book review
 regd_users.delete('/auth/review/:isbn', (req, res) => {

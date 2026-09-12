@@ -4,15 +4,17 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
-
+// Asynchronous function to get all books.
 async function getBooks(req, res) {
   res.send(JSON.stringify({books}, null, 5));
 };
 
+// Asynchronous function to get a book from its ISBN.
 async function getBookISBN(req, res) {
   res.send(JSON.stringify(books[req.params.isbn]), null, 5);
 };
 
+// Asynchronous function to get a book from its Author.
 async function getBookAuthor(req, res) {
   const author = req.params.author;
   const bookKeys = Object.keys(books);
@@ -33,6 +35,7 @@ async function getBookAuthor(req, res) {
   }
 };
 
+// Asynchronous function to get a book from its Title.
 async function getBookTitle(req,res) {
   const title = req.params.title;
   const bookKeys = Object.keys(books);
@@ -53,10 +56,12 @@ async function getBookTitle(req,res) {
   }
 }
 
+// Register a user.
 public_users.post("/register", (req,res) => {
   const username = req.body.username;
   const password = req.body.password;
   
+  //If username and password are valid we add the user to the 'users' collection. If not return a response code, and error message.
   if (username && password) {
     if (isValid(username)) {
       users.push({username: username, password: password});
