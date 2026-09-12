@@ -20,6 +20,7 @@ async function getBookAuthor(req, res) {
   const bookKeys = Object.keys(books);
   let foundBooks = [];
 
+  // Iterate through the books collection, and add it to the 'foundBooks' collection.
   bookKeys.forEach(element => {
     if (books[element]["author"] === author) {
       foundBooks.push(books[element]);
@@ -28,6 +29,7 @@ async function getBookAuthor(req, res) {
     }
   });
 
+  // If we found a book, send it as a response. If not return a error status code, along with a message.
   if (foundBooks.length > 0) {
     res.status(200).send(JSON.stringify(foundBooks));
   } else {
@@ -41,6 +43,7 @@ async function getBookTitle(req,res) {
   const bookKeys = Object.keys(books);
   let foundBooks = [];
 
+  // Iterate through the books collection, and add it to the 'foundBooks' collection.
   bookKeys.forEach(element => {
     if (books[element]["title"] === title) {
       foundBooks.push(books[element]);
@@ -49,6 +52,7 @@ async function getBookTitle(req,res) {
     }
   });
 
+  // If we found a book, send it as a response. If not return a error status code, along with a message.
   if (foundBooks.length > 0) {
     res.status(200).send(JSON.stringify(foundBooks));
   } else {
@@ -61,7 +65,7 @@ public_users.post("/register", (req,res) => {
   const username = req.body.username;
   const password = req.body.password;
   
-  //If username and password are valid we add the user to the 'users' collection. If not return a response code, and error message.
+  //If username and password are valid we add the user to the 'users' collection. If not return a error status code, along with a message.
   if (username && password) {
     if (isValid(username)) {
       users.push({username: username, password: password});
