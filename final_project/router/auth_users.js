@@ -67,7 +67,7 @@ regd_users.delete('/auth/review/:isbn', (req, res) => {
   const isbn = req.params.isbn;
   if (books[isbn]["reviews"][req.session.authorization["username"]]) {
     delete books[isbn]["reviews"][req.session.authorization["username"]];
-    res.status(200).json({message: "You review has been deleted."});
+    res.status(200).json({message: "Your review has been deleted."});
   } else {
     res.status(404).json({message: "You have no reviews on this book to delete."});
   }
